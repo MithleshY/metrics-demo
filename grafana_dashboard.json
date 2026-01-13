@@ -1,4 +1,41 @@
 {
+    "__inputs": [
+        {
+            "name": "DS_PROMETHEUS-2",
+            "label": "prometheus-2",
+            "description": "",
+            "type": "datasource",
+            "pluginId": "prometheus",
+            "pluginName": "Prometheus"
+        }
+    ],
+    "__elements": {},
+    "__requires": [
+        {
+            "type": "panel",
+            "id": "gauge",
+            "name": "Gauge",
+            "version": ""
+        },
+        {
+            "type": "grafana",
+            "id": "grafana",
+            "name": "Grafana",
+            "version": "12.3.1"
+        },
+        {
+            "type": "datasource",
+            "id": "prometheus",
+            "name": "Prometheus",
+            "version": "1.0.0"
+        },
+        {
+            "type": "panel",
+            "id": "timeseries",
+            "name": "Time series",
+            "version": ""
+        }
+    ],
     "annotations": {
         "list": [
             {
@@ -20,47 +57,17 @@
     "graphTooltip": 0,
     "id": null,
     "links": [],
-    "liveNow": false,
     "panels": [
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "P1809F7CD0C75ACF3"
+                "uid": "${DS_PROMETHEUS-2}"
             },
+            "description": "This shows the current number of items in the queue as a speedometer",
             "fieldConfig": {
                 "defaults": {
                     "color": {
-                        "mode": "palette-classic"
-                    },
-                    "custom": {
-                        "axisCenteredZero": false,
-                        "axisColorMode": "text",
-                        "axisLabel": "",
-                        "axisPlacement": "auto",
-                        "barAlignment": 0,
-                        "drawStyle": "line",
-                        "fillOpacity": 10,
-                        "gradientMode": "none",
-                        "hideFrom": {
-                            "legend": false,
-                            "tooltip": false,
-                            "viz": false
-                        },
-                        "lineInterpolation": "linear",
-                        "lineWidth": 1,
-                        "pointSize": 5,
-                        "scaleDistribution": {
-                            "type": "linear"
-                        },
-                        "showPoints": "auto",
-                        "spanNulls": false,
-                        "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                        },
-                        "thresholdsStyle": {
-                            "mode": "off"
-                        }
+                        "mode": "thresholds"
                     },
                     "mappings": [],
                     "thresholds": {
@@ -68,11 +75,11 @@
                         "steps": [
                             {
                                 "color": "green",
-                                "value": null
+                                "value": 0
                             },
                             {
                                 "color": "red",
-                                "value": 80
+                                "value": 10
                             }
                         ]
                     }
@@ -85,59 +92,67 @@
                 "x": 0,
                 "y": 0
             },
-            "id": 1,
+            "id": 3,
             "options": {
-                "legend": {
-                    "calcs": [],
-                    "displayMode": "list",
-                    "placement": "bottom",
-                    "showLegend": true
+                "minVizHeight": 75,
+                "minVizWidth": 75,
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
                 },
-                "tooltip": {
-                    "mode": "single",
-                    "sort": "none"
-                }
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true,
+                "sizing": "auto"
             },
+            "pluginVersion": "12.3.1",
             "targets": [
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "P1809F7CD0C75ACF3"
+                        "uid": "${DS_PROMETHEUS-2}"
                     },
                     "editorMode": "code",
-                    "expr": "rate(custom_request_count_total[1m])",
-                    "legendFormat": "Request Rate",
+                    "expr": "custom_queue_size",
+                    "legendFormat": "__auto",
                     "range": true,
                     "refId": "A"
                 }
             ],
-            "title": "Request Rate (Requests/sec)",
-            "type": "timeseries"
+            "title": "Current Queue Size",
+            "type": "gauge"
         },
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "P1809F7CD0C75ACF3"
+                "uid": "${DS_PROMETHEUS-2}"
             },
+            "description": "This shows the average time (in seconds) your API takes to respond",
             "fieldConfig": {
                 "defaults": {
                     "color": {
                         "mode": "palette-classic"
                     },
                     "custom": {
+                        "axisBorderShow": false,
                         "axisCenteredZero": false,
                         "axisColorMode": "text",
                         "axisLabel": "",
                         "axisPlacement": "auto",
                         "barAlignment": 0,
+                        "barWidthFactor": 0.6,
                         "drawStyle": "line",
-                        "fillOpacity": 10,
+                        "fillOpacity": 0,
                         "gradientMode": "none",
                         "hideFrom": {
                             "legend": false,
                             "tooltip": false,
                             "viz": false
                         },
+                        "insertNulls": false,
                         "lineInterpolation": "linear",
                         "lineWidth": 1,
                         "pointSize": 5,
@@ -145,6 +160,7 @@
                             "type": "linear"
                         },
                         "showPoints": "auto",
+                        "showValues": false,
                         "spanNulls": false,
                         "stacking": {
                             "group": "A",
@@ -160,7 +176,7 @@
                         "steps": [
                             {
                                 "color": "green",
-                                "value": null
+                                "value": 0
                             },
                             {
                                 "color": "red",
@@ -187,19 +203,21 @@
                     "showLegend": true
                 },
                 "tooltip": {
+                    "hideZeros": false,
                     "mode": "single",
                     "sort": "none"
                 }
             },
+            "pluginVersion": "12.3.1",
             "targets": [
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "P1809F7CD0C75ACF3"
+                        "uid": "${DS_PROMETHEUS-2}"
                     },
                     "editorMode": "code",
                     "expr": "rate(custom_process_duration_seconds_sum[1m]) / rate(custom_process_duration_seconds_count[1m])",
-                    "legendFormat": "Avg Duration",
+                    "legendFormat": "__auto",
                     "range": true,
                     "refId": "A"
                 }
@@ -210,12 +228,47 @@
         {
             "datasource": {
                 "type": "prometheus",
-                "uid": "P1809F7CD0C75ACF3"
+                "uid": "${DS_PROMETHEUS-2}"
             },
+            "description": "This shows how many requests are coming in per second",
             "fieldConfig": {
                 "defaults": {
                     "color": {
-                        "mode": "thresholds"
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "barWidthFactor": 0.6,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "showValues": false,
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
                     },
                     "mappings": [],
                     "thresholds": {
@@ -223,15 +276,11 @@
                         "steps": [
                             {
                                 "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "#EAB839",
-                                "value": 5
+                                "value": 0
                             },
                             {
                                 "color": "red",
-                                "value": 10
+                                "value": 80
                             }
                         ]
                     }
@@ -244,51 +293,54 @@
                 "x": 0,
                 "y": 8
             },
-            "id": 3,
+            "id": 1,
             "options": {
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
                 },
-                "showThresholdLabels": false,
-                "showthresholdMarkers": true
+                "tooltip": {
+                    "hideZeros": false,
+                    "mode": "single",
+                    "sort": "none"
+                }
             },
+            "pluginVersion": "12.3.1",
             "targets": [
                 {
                     "datasource": {
                         "type": "prometheus",
-                        "uid": "P1809F7CD0C75ACF3"
+                        "uid": "${DS_PROMETHEUS-2}"
                     },
                     "editorMode": "code",
-                    "expr": "custom_queue_size",
-                    "legendFormat": "Queue Size",
+                    "expr": "rate(custom_request_count_total[1m])",
+                    "hide": false,
+                    "instant": false,
+                    "legendFormat": "__auto",
                     "range": true,
                     "refId": "A"
                 }
             ],
-            "title": "Current Queue Size",
-            "type": "gauge"
+            "title": "Request Rate",
+            "type": "timeseries"
         }
     ],
-    "refresh": "5s",
-    "schemaVersion": 38,
-    "style": "dark",
+    "preload": false,
+    "schemaVersion": 42,
     "tags": [],
     "templating": {
         "list": []
     },
     "time": {
-        "from": "now-5m",
+        "from": "now-6h",
         "to": "now"
     },
     "timepicker": {},
-    "timezone": "",
-    "title": "Metrics Demo Dashboard",
-    "uid": "metrics-demo-dash",
-    "version": 1,
+    "timezone": "browser",
+    "title": "metrics-app-demo",
+    "uid": "ad7j86g",
+    "version": 5,
     "weekStart": ""
 }
